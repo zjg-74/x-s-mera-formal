@@ -1,0 +1,5 @@
+/build/
+/.lake/
+*.log
+*.trace
+.DS_Store
