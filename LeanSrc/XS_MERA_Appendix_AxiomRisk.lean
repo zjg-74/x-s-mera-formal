@@ -22,11 +22,19 @@ AX4: InterfaceCut p → InstitutionalCut p
 
 ## Temporal bridge TB1–TB3
 
+(implemented in `XS_MERA_InterfaceGap_TemporalBridge.lean` as hypothesis bundles, not axioms)
+
 TB1: π only samples initial slice, not future trajectory valuation
+     → `SliceRepresentable πt πs σ`; consequence `Thm_SliceBlindToFuture`
 TB2: Slow-value valuation resides in LatentState
+     → `SlowValueLatent πt SlowValue H LatentState stateOf`
 TB3: Hazard enforces instant summary; settlement rejects delayed latent value
+     → `InstantVerdictRecorded πt Record`; consequence `Thm_RecordPersists`
   Risk: TB3 is a governance assumption, not technical.
   If settlement cycles are extended, temporal gap vanishes.
+  Corollary: 「当期不可观测」⇏「永久不可结算」 (`CounterModel.not_observable_implies_not_never`).
+  Nothing in TB1–TB3 entails that the backlog grows; only that it does not self-heal
+  under a frozen interface (`Thm_BacklogDoesNotSelfHeal`).
 
 ## Two AX3 variants
 

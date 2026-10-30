@@ -4,7 +4,8 @@ Formal pressure-testing for the X‑S‑MERA cognitive framework, focused on **i
 
 This repository contains the formal model, typeclass hierarchy, temporal bridge, grey boundary case analysis, Plausible property-based random testing, and two variants of the core isolation axiom (weak AX3 / strong AX3*).
 
-> Companion to the journal paper: Quantification alienation and reward hijacking in instructional evaluation
+> Companion to the paper 《完整的界面，残缺的接口：教育评价中的需求预格式化及其制度位置》
+> (*A Complete Interface, an Incomplete Port: Demand Pre-formatting in Educational Evaluation*)
 
 ## Dependency
 
@@ -17,7 +18,14 @@ This repository contains the formal model, typeclass hierarchy, temporal bridge,
 ```bash
 lake update
 lake build
-lake run xsmera_test
+```
+
+The Plausible property test has no executable target: `lean_exe` has no `srcDir` field, so an
+executable root cannot point into `LeanSrc/`. Until a root-level `Main.lean` is added (see the
+commented block in `lakefile.lean`), run the test module directly:
+
+```bash
+lake env lean LeanSrc/XS_MERA_InterfaceGap_PlausibleTest.lean
 ```
 
 ## Module dependency order (critical)
@@ -57,8 +65,19 @@ MIT
 |---|---|
 | `XS_MERA_Core.lean` | Definitions written. Not compiled. |
 | `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Not compiled**; one `sorry`. |
+| `XS_MERA_InterfaceGap_TemporalBridge.lean` | TB1–TB3 as hypothesis bundles, 6 theorems + 1 counter-model. **Not compiled.** |
 | `XS_MERA_Appendix_AxiomRisk.lean` | Complete (documentation module). |
-| the other five modules | Placeholders (module docstring only) |
+| the other four modules | Placeholders (module docstring only) |
+
+A2 (`TemporalBridge`) departed from the `axiom` style used in `Core`/`InterfaceGap`: TB1–TB3 are
+`Prop`-valued hypothesis bundles (`SliceRepresentable`, `SlowValueLatent`, `InstantVerdictRecorded`)
+that each theorem takes as an explicit argument, so a reader can see which premise carries which
+conclusion — and which conclusion collapses when a premise is removed. This is deliberate: empty or
+definitional axioms are the easiest thing for a referee to dismiss.
+
+Wording derived from this module (Chinese) is in [`docs/A2-第五节时序措辞.md`](docs/A2-第五节时序措辞.md):
+five sentences in §5 that the model forbids or forces, two optional insertions, and four statements
+that must not be written.
 
 Two things a reader should know before citing this repository:
 
