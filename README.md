@@ -2,7 +2,9 @@
 
 Formal pressure-testing for the X‑S‑MERA cognitive framework, focused on **interface gap, reward hacking, reactive action, and temporal latent value**.
 
-This repository contains the formal model, typeclass hierarchy, temporal bridge, grey boundary case analysis, Plausible property-based random testing, and two variants of the core isolation axiom (weak AX3 / strong AX3*).
+**Status: work in progress, not a verification artefact.** No module has been checked by a Lean compiler yet. Nothing here should be cited as "verified" or "proved"; at most it is a consistency check on definitions, and it starts from premises that are not themselves argued for. See `docs/工程使用边界.md` for what this repository may and may not be used to claim.
+
+This repository contains the formal model, typeclass hierarchy, temporal bridge, grey boundary case analysis, an exhaustive finite-domain scan (Plausible is a declared dependency but is not yet exercised), and two planned variants of the core isolation axiom (weak AX3 / strong AX3*).
 
 > Companion to the paper 《完整的界面，残缺的接口：教育评价中的需求预格式化及其制度位置》
 > (*A Complete Interface, an Incomplete Port: Demand Pre-formatting in Educational Evaluation*)
@@ -48,10 +50,19 @@ lake env lean LeanSrc/XS_MERA_InterfaceGap_PlausibleTest.lean
 
 ## Output
 
-- Proofs for the static benchmark model
-- Plausible randomized search for counterexamples
-- Explicit witness `pGrey` demonstrating the boundary of the weak axiom
+Delivered:
+
+- Definitions and hypothesis bundles for the static model, the temporal bridge, and the expansion-conflict test
+- An exhaustive scan over a finite practice/signal domain (18 projection × order classes); see `XS_MERA_InterfaceGap_PlausibleTest.lean`
 - Side-by-side comparison of axiom variants for discussion in the paper
+
+Planned, not yet written:
+
+- A compiled build (no toolchain available on the authoring machine)
+- Replacement of the vacuous axioms (`GAPS_axioms`, `B1B2_bridge_axioms`) and of the near-vacuous weak `AX3`
+- `GreyCase`: an explicit witness `pGrey` demonstrating the boundary of the weak axiom
+- `ModelClass`: a static benchmark model satisfying all four weak axioms
+- `A3Star`: the strong-axiom variant and its cost
 
 ## License
 
