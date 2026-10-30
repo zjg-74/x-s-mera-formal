@@ -53,8 +53,29 @@ MIT
 
 ## Repository status
 
-`XS_MERA_Appendix_AxiomRisk.lean` is complete. The seven other modules are present as
-**placeholders** (module docstring only) so that the directory tree and `lakefile.lean` match
-the intended layout; no proof content has been committed for them yet. Until they are filled in,
-`lake build` succeeds but proves nothing beyond the appendix, and `lake run xsmera_test` has no
-`main` to run.
+| Module | Status |
+|---|---|
+| `XS_MERA_Core.lean` | Definitions written. Not compiled. |
+| `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Not compiled**; one `sorry`. |
+| `XS_MERA_Appendix_AxiomRisk.lean` | Complete (documentation module). |
+| the other five modules | Placeholders (module docstring only) |
+
+Two things a reader should know before citing this repository:
+
+1. **Nothing here has been type-checked.** The modules were written without a Lean toolchain
+   on the author's machine; they follow Lean 4 rules but have not been through `lake build`.
+2. **The axiom system is currently vacuous.** `AX1` and `AX4` are definitional truths (hence
+   stated as theorems, not axioms), `AX2` holds only because `Hazard` is a conjunct of
+   `DemandPreformatted`, and `AX3` is trivially true because `ReactiveAction` implies
+   `π p = none` while `rewardHack` requires `π p ≠ none`. The intended contrast between weak
+   `AX3` and `AX3*` therefore does not yet have a model. See `NOTE` at the end of
+   `XS_MERA_InterfaceGap.lean` for the two candidate repairs.
+
+This repository is intended as a formal companion to the argument, not as evidence for it:
+Lean proves "axioms ⇒ theorems", never "axioms are true".
+
+## Design note: no Mathlib
+
+The real numbers and the `Set` type live in Mathlib, whose first build takes hours. To keep
+`lake build` feasible for a referee, values are typed over an abstract `R` with `[LT R]` and
+sets are written as predicates `P → Prop`. Instantiating `R := ℝ` later is a one-line change.
