@@ -162,19 +162,15 @@ theorem AX4_CutIsSuperposition (D_inst : P → Prop) (π : P → Option X) (p : 
 
 end Axioms
 
-/-! ### 压力测试目标命题 -/
+/-! ### 压力测试目标命题（已移出）
 
-/-- 拓宽像集不能消除判断缺口。
+此处原有 `Thm_ExpandingImageDoesNotEliminateCommensurationPressure`，含 `sorry`，且
+结论 `∃ p, JudgementGap π' le_X PreferP` 不含 `π'`——「拓宽像集」对结论没有任何影响，
+命题既不成立也不可证。
 
-**本式保留原形但未证明**（`sorry`），且原表述有一个结构问题：`JudgementGap` 的
-定义不含 `π'`，故结论与前件无关，命题既不成立也不可证。重述方向见 `NOTE` 第 10 条。
-
-公开仓库中若保留 `sorry`，须在 README 与本文件同时标明「未证明」，否则等同于
-宣称已证。 -/
-theorem Thm_ExpandingImageDoesNotEliminateCommensurationPressure
-    (π' : P → Option X) (hmono : ∀ s : X, Ranπ π s → Ranπ π' s)
-    (hH : Hazard) :
-    ∃ p : P, JudgementGap π' le_X PreferP := sorry
+该命题已删除，替代物见 `XS_MERA_InterfaceGap_PlausibleTest`：`Conflict`（配对上的
+序与判断相悖）+ `Thm_ExpansionPreservesConflict`（只扩像集、不改序，冲突存续）。
+不在此处保留一个带 `sorry` 的旧命题，是因为公开仓库里的 `sorry` 等于宣称已证。 -/
 
 end InterfaceGap
 end XS_MERA
@@ -210,7 +206,9 @@ end XS_MERA
 9. **`AX1`–`AX4` 实际只约束了一条**：`AX1`、`AX4` 已是 definitional truth，`AX2`
    因定义含 `Hazard` 而空转。想让公理系统有内容，`AX2` 需独立表述，且 `InterfaceCut`
    不应把制度条件写进自身定义。
-10. **`Thm_…` 的前件与结论不相关**：`JudgementGap` 不含 `π'`，故「拓宽像集」对结论
+10. **`Thm_…` 的前件与结论不相关**（该定理已删除）：`JudgementGap` 不含 `π'`，故「拓宽像集」对结论
     无影响。合理重述应把缺口锚定在 `π'` 上，例如断言「存在 `p`，`PreferP` 与
     `π'` 排序不一致，且该 `p` 在 `π` 下亦不可见」——这才检验「拓宽不能消除」。
+    重述版已落到 `XS_MERA_InterfaceGap_PlausibleTest` 的 `Conflict` / `LiftExists` /
+    `Thm_ExpansionPreservesConflict`，本文件不再保留旧式。
 -/

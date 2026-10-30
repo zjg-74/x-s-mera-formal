@@ -64,10 +64,27 @@ MIT
 | Module | Status |
 |---|---|
 | `XS_MERA_Core.lean` | Definitions written. Not compiled. |
-| `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Not compiled**; one `sorry`. |
+| `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Not compiled**; no `sorry` (the broken expansion theorem was removed, see below). |
 | `XS_MERA_InterfaceGap_TemporalBridge.lean` | TB1–TB3 as hypothesis bundles, 6 theorems + 1 counter-model. **Not compiled.** |
+| `XS_MERA_InterfaceGap_PlausibleTest.lean` | A3: `Conflict` / `LiftExists`, 3 theorems + 4 toy-model results + exhaustive 18-case scan. **Not compiled.** |
 | `XS_MERA_Appendix_AxiomRisk.lean` | Complete (documentation module). |
-| the other four modules | Placeholders (module docstring only) |
+| the other three modules | Placeholders (module docstring only) |
+
+A3 replaced the theorem it was supposed to test. The old statement
+`Thm_ExpandingImageDoesNotEliminateCommensurationPressure` concluded `∃ p, JudgementGap π' …`,
+where `JudgementGap` does not mention `π'` at all — so "expanding the image" had no bearing on the
+conclusion, and the statement was neither true nor provable (it also carried a `sorry`). It is now
+gone, replaced by a pair-level formulation: `Conflict` (a visible pair whose index order contradicts
+professional preference), `conflict_blocks_lift` (such a pair admits no compatible total order), and
+`Thm_ExpansionPreservesConflict` (widening the image while leaving the order on old pairs unchanged
+preserves the conflict). The formal counterpart of "multimodality widens the interface's breadth, not
+its direction" is exactly that theorem — with the qualification that reordering *can* remove the
+conflict, which is the statement's boundary, not its refutation.
+
+A3 deliberately runs an exhaustive scan instead of a Plausible random search: on two practices and
+two signal values, nine projections × two orders is complete, whereas sampling can only miss
+counterexamples. `import Plausible` and the lakefile dependency are kept; the hookup point is in the
+module's `NOTE`.
 
 A2 (`TemporalBridge`) departed from the `axiom` style used in `Core`/`InterfaceGap`: TB1–TB3 are
 `Prop`-valued hypothesis bundles (`SliceRepresentable`, `SlowValueLatent`, `InstantVerdictRecorded`)
