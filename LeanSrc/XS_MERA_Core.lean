@@ -22,7 +22,7 @@ namespace XS_MERA
 本层不展开，供 `XS_MERA_InterfaceGap_TemporalBridge` 实例化。 -/
 variable {S E V : Type}
 variable (step : S → E → S)
-variable (trace : ℕ → S → S)
+variable (trace : Nat → S → S)
 variable (LatentState : S → Prop)
 variable (Entropy : S → V)
 

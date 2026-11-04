@@ -1,3 +1,5 @@
+import XS_MERA_Core
+
 /-!
   XS_MERA_InterfaceGap
 
@@ -19,7 +21,6 @@
      而 `rewardHack` 要求 `π p ≠ none`。两条在可见性上直接互斥，于是 `AX3` 恒真，
      弱版与 `AX3*` 的区分在模型中落空。这是需要决策的模型缺陷，不是笔误（见 `NOTE` 第 7、8 条）。
 -/
-import XS_MERA_Core
 
 open XS_MERA
 
@@ -70,7 +71,7 @@ def IsTotalOrderOn {α : Type} (r : α → α → Prop) : Prop :=
 
 /-- 判断缺口：`X` 上已有全序，但它无法沿 `π` 提升为 `P` 上的全序——
 即面向指标的可比较性，不能升格为面向实践的可比较性。 -/
-def JudgementGap (π : P → Option X) (le_X : X → X → Prop) (PreferP : P → P → Prop) : Prop :=
+def JudgementGap (π : P → Option X) (le_X : X → X → Prop) (_PreferP : P → P → Prop) : Prop :=
   IsTotalOrderOn le_X ∧
     ¬ ∃ le_P : P → P → Prop,
         IsTotalOrderOn le_P ∧

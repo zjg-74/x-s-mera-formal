@@ -1,7 +1,13 @@
 -- lakefile.lean
-require "plausible" from "https://github.com/leanprover-community/plausible" @ "main"
+-- 说明：Plausible 依赖已暂时移除（源码未 import Plausible，穷举扫描用纯 IO 实现；
+-- 且当前网络无法访问 GitHub）。接入点见 PlausibleTest 文末 NOTE，恢复时加回：
+-- require plausible from git "https://github.com/leanprover-community/plausible" @ "main"
+import Lake
+open Lake DSL
 
-lean_lib XSMERA where
+package «x-s-mera-formal»
+
+@[default_target] lean_lib XSMERA where
   srcDir := "LeanSrc"
   roots := #[
     `XS_MERA_Core,
@@ -15,7 +21,7 @@ lean_lib XSMERA where
   ]
 
 -- 注意：`lean_exe` 没有 `srcDir` 字段（只有 `lean_lib` 有），所以 exe 的根模块必须放在
--- 包根目录，不能指向 `LeanSrc/` 里的模块。要跑 Plausible 的属性测试，两条路：
+-- 包根目录，不能指向 `LeanSrc/` 里的模块。要跑穷举扫描，两条路：
 --
 --   1. 不建 exe，直接用 `lake env lean LeanSrc/XS_MERA_InterfaceGap_PlausibleTest.lean`
 --      执行文件里的 `#eval`（当前做法，见 README）；

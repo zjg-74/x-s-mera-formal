@@ -2,18 +2,18 @@
 
 Formal pressure-testing for the X‑S‑MERA cognitive framework, focused on **interface gap, reward hacking, reactive action, and temporal latent value**.
 
-**Status: work in progress, not a verification artefact.** No module has been checked by a Lean compiler yet. Nothing here should be cited as "verified" or "proved"; at most it is a consistency check on definitions, and it starts from premises that are not themselves argued for. See `docs/工程使用边界.md` for what this repository may and may not be used to claim.
+**Status: work in progress, not a verification artefact.** All modules now compile (`lake build` passes, Lean 4.35), and the exhaustive finite-domain scan runs and prints its counterexample table. Compilation only checks that the definitions are internally consistent; it does not make the axioms true or the claims "verified" or "proved". The axiom system is still partly vacuous and three modules are placeholders. See `docs/工程使用边界.md` for what this repository may and may not be used to claim.
 
-This repository contains the formal model, typeclass hierarchy, temporal bridge, grey boundary case analysis, an exhaustive finite-domain scan (Plausible is a declared dependency but is not yet exercised), and two planned variants of the core isolation axiom (weak AX3 / strong AX3*).
+This repository contains the formal model, typeclass hierarchy, temporal bridge, grey boundary case analysis, an exhaustive finite-domain scan (pure `IO`, no Plausible dependency), and two planned variants of the core isolation axiom (weak AX3 / strong AX3*).
 
 > Companion to the paper 《完整的界面，残缺的接口：教育评价中的需求预格式化及其制度位置》
 > (*A Complete Interface, an Incomplete Port: Demand Pre-formatting in Educational Evaluation*)
 
 ## Dependency
 
-- Lean 4 (nightly / stable compatible with Plausible)
+- Lean 4 (tested with 4.35.0)
 - Lake build system
-- Plausible: property-based testing (Lean4 alternative to QuickChick)
+- `Std` (Lean standard library; provides the `Nat` instances). No Mathlib, no Plausible — the exhaustive scan is a plain `IO` loop, so `lake build` needs no network.
 
 ## Build & Run
 
@@ -22,13 +22,15 @@ lake update
 lake build
 ```
 
-The Plausible property test has no executable target: `lean_exe` has no `srcDir` field, so an
-executable root cannot point into `LeanSrc/`. Until a root-level `Main.lean` is added (see the
-commented block in `lakefile.lean`), run the test module directly:
+The exhaustive scan is a plain `IO` module, so there is no `lean_exe` target: `lean_exe` has no
+`srcDir` field, so an executable root cannot point into `LeanSrc/`. Run the scan directly:
 
 ```bash
 lake env lean LeanSrc/XS_MERA_InterfaceGap_PlausibleTest.lean
 ```
+
+The `#eval main` at the end of that file executes the scan and prints the conflict table. (A
+root-level `Main.lean` could also be added later — see the commented block in `lakefile.lean`.)
 
 ## Module dependency order (critical)
 
@@ -56,9 +58,16 @@ Delivered:
 - An exhaustive scan over a finite practice/signal domain (18 projection × order classes); see `XS_MERA_InterfaceGap_PlausibleTest.lean`
 - Side-by-side comparison of axiom variants for discussion in the paper
 
+Done (2026-11):
+
+- A compiled build passes (`lake build`, Lean 4.35). Structural fixes were required: `import`s moved to
+  the top of each file, `import Std` added for the `Nat` instances, and the `ℕ` notation replaced by
+  `Nat` (the `ℕ` symbol is unreliable without Mathlib).
+- The exhaustive scan runs: `lake env lean LeanSrc/XS_MERA_InterfaceGap_PlausibleTest.lean` prints
+  the 9-projection × 2-order conflict table.
+
 Planned, not yet written:
 
-- A compiled build (no toolchain available on the authoring machine)
 - Replacement of the vacuous axioms (`GAPS_axioms`, `B1B2_bridge_axioms`) and of the near-vacuous weak `AX3`
 - `GreyCase`: an explicit witness `pGrey` demonstrating the boundary of the weak axiom
 - `ModelClass`: a static benchmark model satisfying all four weak axioms
@@ -74,10 +83,10 @@ MIT
 
 | Module | Status |
 |---|---|
-| `XS_MERA_Core.lean` | Definitions written. Not compiled. |
-| `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Not compiled**; no `sorry` (the broken expansion theorem was removed, see below). |
-| `XS_MERA_InterfaceGap_TemporalBridge.lean` | TB1–TB3 as hypothesis bundles, 6 theorems + 1 counter-model. **Not compiled.** |
-| `XS_MERA_InterfaceGap_PlausibleTest.lean` | A3: `Conflict` / `LiftExists`, 3 theorems + 4 toy-model results + exhaustive 18-case scan. **Not compiled.** |
+| `XS_MERA_Core.lean` | Definitions written. **Compiled** (`lake build`, 2026-11-04). |
+| `XS_MERA_InterfaceGap.lean` | Definitions and AX1–AX4 written. **Compiled**; no `sorry` (the broken expansion theorem was removed, see below). |
+| `XS_MERA_InterfaceGap_TemporalBridge.lean` | TB1–TB3 as hypothesis bundles, 6 theorems + 1 counter-model. **Compiled.** |
+| `XS_MERA_InterfaceGap_PlausibleTest.lean` | A3: `Conflict` / `LiftExists`, 3 theorems + 4 toy-model results + exhaustive 18-case scan. **Compiled; scan runs.** |
 | `XS_MERA_Appendix_AxiomRisk.lean` | Complete (documentation module). |
 | the other three modules | Placeholders (module docstring only) |
 
@@ -109,8 +118,9 @@ that must not be written.
 
 Two things a reader should know before citing this repository:
 
-1. **Nothing here has been type-checked.** The modules were written without a Lean toolchain
-   on the author's machine; they follow Lean 4 rules but have not been through `lake build`.
+1. **The modules compile** (`lake build` passes on Lean 4.35, after structural fixes). Compilation
+   checks internal consistency of the definitions; it does not assert that the axioms are true.
+   Earlier the modules were written without a toolchain on the author's machine.
 2. **The axiom system is currently vacuous.** `AX1` and `AX4` are definitional truths (hence
    stated as theorems, not axioms), `AX2` holds only because `Hazard` is a conjunct of
    `DemandPreformatted`, and `AX3` is trivially true because `ReactiveAction` implies

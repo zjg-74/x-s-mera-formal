@@ -1,3 +1,5 @@
+import XS_MERA_InterfaceGap
+
 /-!
   XS_MERA_InterfaceGap_PlausibleTest
 
@@ -51,7 +53,6 @@
 
   依 Lean 4 规则书写，**未在本机编译验证**。可能报错处与替代写法见文末 `NOTE`。
 -/
-import XS_MERA_InterfaceGap
 
 open XS_MERA
 open XS_MERA.InterfaceGap
@@ -216,6 +217,8 @@ def scan : IO Unit := do
       IO.println s!"{o₁}       {o₂}        {conflictB π leB}      {conflictB π leB'}"
 
 def main : IO Unit := scan
+
+#eval main
 
 end ExpansionTest
 end XS_MERA
